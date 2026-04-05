@@ -1,0 +1,260 @@
+// ============================================================================
+// ВЫВОДЫ (MONITORS)
+// ============================================================================
+output "eDP-1" {
+    mode "2560x1600@165"
+    scale 1.25
+}
+
+output "HDMI-A-1" {
+    mode "2560x1440@144.002"
+    position x=0 y=0
+    scale 1
+}
+
+// ============================================================================
+// ВВОД (INPUT)
+// ============================================================================
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+    }
+    touchpad {
+        tap
+        natural-scroll
+    }
+    focus-follows-mouse max-scroll-amount="0%"
+}
+
+// ============================================================================
+// ПЕРЕМЕННЫЕ (ENVIRONMENT)
+// ============================================================================
+screenshot-path "~/Изображения/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+environment {
+    LANG "ru_RU.UTF-8"
+    LC_ALL "ru_RU.UTF-8"
+    GTK_IM_MODULE "fcitx"
+    QT_IM_MODULE "fcitx"
+    XMODIFIERS "@im=fcitx"
+    SDL_IM_MODULE "fcitx"
+    GLFW_IM_MODULE "fcitx"
+    XCURSOR_SIZE "24"
+    XDG_SESSION_TYPE "wayland"
+    XDG_CURRENT_DESKTOP "GNOME"
+    LIBVA_DRIVER_NAME "nvidia"
+    GBM_BACKEND "nvidia-drm"
+    __GLX_VENDOR_LIBRARY_NAME "nvidia"
+    NVD_BACKEND "direct"
+    AQ_DRM_DEVICES "/dev/dri/card2:/dev/dri/card1"
+    CHROME_EXECUTABLE "chromium"
+    CLIPHIST_MAX_ITEMS "50"
+    CLIPHIST_MAX_TEXT_LENGTH "5000"
+}
+
+// ============================================================================
+// РАСКЛАДКА ОКОН (LAYOUT)
+// ============================================================================
+layout {
+    gaps 5
+
+    center-focused-column "never"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.5; }
+
+    focus-ring {
+        width 2
+        active-color "#89b4faee"
+        inactive-color "#6c7086aa"
+    }
+
+    border {
+        off
+    }
+
+    shadow {
+        off
+    }
+}
+
+// ============================================================================
+// АНИМАЦИИ
+// ============================================================================
+animations {
+    // Включены по умолчанию, можно настроить отдельно
+    // slowdown 1.0
+}
+
+prefer-no-csd
+
+// ============================================================================
+// АВТОЗАПУСК (AUTOSTART)
+// ============================================================================
+spawn-at-startup "fcitx5" "-d"
+//spawn-at-startup "waybar"
+//spawn-at-startup "swaync"
+//spawn-at-startup "bash" "-c" "sleep 2 && nm-applet --indicator & blueman-applet &"
+//spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
+spawn-at-startup "/opt/v2rayn-bin/v2rayN"
+//spawn-at-startup "awww-daemon"
+spawn-at-startup "qs" "-c" "noctalia-shell"
+
+// ============================================================================
+// ОВЕРЛЕЙ ГОРЯЧИХ КЛАВИШ
+// ============================================================================
+hotkey-overlay {
+    skip-at-startup
+}
+
+// ============================================================================
+// ПРИВЯЗКИ КЛАВИШ (BINDS)
+// ============================================================================
+binds {
+    // === СИСТЕМНЫЕ ===
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    
+    // === ЗАПУСК ПРИЛОЖЕНИЙ (ваши оригинальные бинды) ===
+    Mod+Return hotkey-overlay-title="Терминал: kitty" { spawn "kitty"; }
+    Mod+E hotkey-overlay-title="Файловый менеджер: nautilus" { spawn "nautilus"; }
+    Mod+R hotkey-overlay-title="Лаунчер: rofi" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    Mod+S { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
+    Alt+Tab hotkey-overlay-title="Переключение окон: rofi" { spawn "rofi" "-modi" "window" "-show"; }
+    
+    // === УПРАВЛЕНИЕ ОКНАМИ ===
+    Mod+Q repeat=false { close-window; }
+    Mod+F repeat=false { fullscreen-window; }
+    Mod+Shift+F repeat=false { maximize-column; }
+    Mod+V repeat=false { toggle-window-floating; }
+    Mod+M repeat=false { quit; }
+    Mod+Escape { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
+    
+    // === УВЕДОМЛЕНИЯ ===
+    Mod+D { spawn "swaync-client" "-t" "-sw"; }
+    Mod+Shift+N { spawn "swaync-client" "-t" "-sw"; }
+    
+    // === СКРИНШОТЫ ===
+    Mod+Shift+S { screenshot; }
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+    
+    // === БУФЕР ОБМЕНА (ваш оригинальный бинд) ===
+    Mod+Shift+V { spawn-sh "qs -c noctalia-shell ipc call launcher clipboard"; }  // ← ОСТАВЛЯЕМ
+    
+    // === ОБОИ ===
+    Mod+Shift+W { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
+    
+    
+    // === НАВИГАЦИЯ ПО ОКНАМ ===
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up { focus-window-up; }
+    Mod+Down { focus-window-down; }
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+K { focus-window-up; }
+    Mod+J { focus-window-down; }
+    
+    // === РАБОЧИЕ СТОЛЫ ===
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    
+    Mod+Shift+Down { focus-workspace-down; }
+    Mod+Shift+Up { focus-workspace-up; }
+    Mod+Ctrl+Left  { move-column-left-or-to-monitor-left; }
+    Mod+Ctrl+Down  { move-window-down-or-to-workspace-down; }
+    Mod+Ctrl+Up    { move-window-up-or-to-workspace-up; }
+    Mod+Ctrl+Right { move-column-right-or-to-monitor-right; }
+    
+    // === КЛАВИШИ МЕДИА И ЯРКОСТИ ===
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ +5%"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ -5%"; }
+    XF86AudioMute allow-when-locked=true { spawn-sh "pactl set-sink-mute @DEFAULT_SINK@ toggle"; }
+    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
+    
+    // === АВАРИЙНЫЙ ВЫХОД ===
+    Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    
+    // === УПРАВЛЕНИЕ РАЗМЕРАМИ (ПЕРЕНАЗНАЧЕНО, чтобы не конфликтовать) ===
+    Mod+Ctrl+R { switch-preset-column-width; }
+    Mod+Ctrl+Shift+R { switch-preset-window-height; }
+    Mod+Alt+R { reset-window-height; }
+    
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+    
+    // === ПЛАВАЮЩИЕ ОКНА (ПЕРЕНАЗНАЧЕНО) ===
+    Mod+Alt+V { switch-focus-between-floating-and-tiling; }  // ← перенесено с Mod+Shift+V
+    
+    // === ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ NIRI ===
+    Mod+BracketLeft { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Comma { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+    Mod+Ctrl+F { expand-column-to-available-width; }
+    Mod+C { center-column; }
+    Mod+W { toggle-column-tabbed-display; }
+
+    Mod+WheelScrollUp   { focus-column-left; }
+    Mod+WheelScrollDown { focus-column-right; }
+
+    Mod+Shift+WheelScrollUp   { focus-workspace-up; }
+    Mod+Shift+WheelScrollDown { focus-workspace-down; }
+    
+    Mod+Ctrl+WheelScrollUp   { move-column-to-workspace-up; }
+    Mod+Ctrl+WheelScrollDown { move-column-to-workspace-down; }
+
+}
+
+// ============================================================================
+// ПРАВИЛА ОКОН (WINDOW RULES)
+// ============================================================================
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+  // Rounded corners for a modern look.
+  geometry-corner-radius 20
+
+  // Clips window contents to the rounded corner boundaries.
+  clip-to-geometry true
+}
+
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
+}
+
+layer-rule {
+  match namespace="^noctalia-overview*"
+  place-within-backdrop true
+}
+
+include "./noctalia.kdl"
+
