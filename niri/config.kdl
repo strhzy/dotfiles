@@ -1,15 +1,15 @@
 // ============================================================================
 // ВЫВОДЫ (MONITORS)
 // ============================================================================
-output "eDP-1" {
-    mode "2560x1600@165"
-    scale 1.25
-}
-
 output "HDMI-A-1" {
     mode "2560x1440@144.002"
     position x=0 y=0
     scale 1
+}
+
+output "eDP-1" {
+    mode "2560x1600@165"
+    scale 2.0
 }
 
 // ============================================================================
@@ -18,7 +18,8 @@ output "HDMI-A-1" {
 input {
     keyboard {
         xkb {
-            layout "us"
+            layout "us,ru"
+            options "grp:alt_shift_toggle"
         }
     }
     touchpad {
@@ -35,11 +36,12 @@ screenshot-path "~/Изображения/Screenshots/Screenshot from %Y-%m-%d %
 environment {
     LANG "ru_RU.UTF-8"
     LC_ALL "ru_RU.UTF-8"
-    GTK_IM_MODULE "fcitx"
-    QT_IM_MODULE "fcitx"
-    XMODIFIERS "@im=fcitx"
-    SDL_IM_MODULE "fcitx"
-    GLFW_IM_MODULE "fcitx"
+    
+    // === Единые настройки для Fcitx5 ===
+    //GTK_IM_MODULE "fcitx"
+    //QT_IM_MODULE "fcitx"
+    //XMODIFIERS "@im=fcitx"
+    
     XCURSOR_SIZE "24"
     XDG_SESSION_TYPE "wayland"
     XDG_CURRENT_DESKTOP "GNOME"
@@ -49,8 +51,8 @@ environment {
     NVD_BACKEND "direct"
     AQ_DRM_DEVICES "/dev/dri/card2:/dev/dri/card1"
     CHROME_EXECUTABLE "chromium"
-    CLIPHIST_MAX_ITEMS "50"
-    CLIPHIST_MAX_TEXT_LENGTH "5000"
+    CLIPHIST_MAX_ITEMS "5000"
+    CLIPHIST_MAX_TEXT_LENGTH "50000"
 }
 
 // ============================================================================
@@ -58,7 +60,7 @@ environment {
 // ============================================================================
 layout {
     gaps 5
-
+    
     center-focused-column "never"
 
     preset-column-widths {
@@ -97,14 +99,9 @@ prefer-no-csd
 // ============================================================================
 // АВТОЗАПУСК (AUTOSTART)
 // ============================================================================
-spawn-at-startup "fcitx5" "-d"
-//spawn-at-startup "waybar"
-//spawn-at-startup "swaync"
-//spawn-at-startup "bash" "-c" "sleep 2 && nm-applet --indicator & blueman-applet &"
-//spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
-spawn-at-startup "/opt/v2rayn-bin/v2rayN"
-//spawn-at-startup "awww-daemon"
+//spawn-at-startup "ibus-daemon" "-drx"
 spawn-at-startup "qs" "-c" "noctalia-shell"
+//spawn-at-startup "fcitx5" "-d"
 
 // ============================================================================
 // ОВЕРЛЕЙ ГОРЯЧИХ КЛАВИШ
@@ -121,11 +118,10 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
     
     // === ЗАПУСК ПРИЛОЖЕНИЙ (ваши оригинальные бинды) ===
-    Mod+Return hotkey-overlay-title="Терминал: kitty" { spawn "kitty"; }
-    Mod+E hotkey-overlay-title="Файловый менеджер: nautilus" { spawn "nautilus"; }
-    Mod+R hotkey-overlay-title="Лаунчер: rofi" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    Mod+Return hotkey-overlay-title="Терминал" { spawn "foot"; }
+    Mod+E hotkey-overlay-title="Файловый менеджер" { spawn "nautilus"; }
+    Mod+R hotkey-overlay-title="Лаунчер" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
     Mod+S { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
-    Alt+Tab hotkey-overlay-title="Переключение окон: rofi" { spawn "rofi" "-modi" "window" "-show"; }
     
     // === УПРАВЛЕНИЕ ОКНАМИ ===
     Mod+Q repeat=false { close-window; }
@@ -151,6 +147,7 @@ binds {
     // === ОБОИ ===
     Mod+Shift+W { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
     
+    Super+Space { spawn "~/.local/bin/lang-switch"; }
     
     // === НАВИГАЦИЯ ПО ОКНАМ ===
     Mod+Left { focus-column-left; }
@@ -175,6 +172,8 @@ binds {
     Mod+Shift+4 { move-column-to-workspace 4; }
     Mod+Shift+5 { move-column-to-workspace 5; }
     
+    Mod+Shift+Left {focus-monitor-left; }
+    Mod+Shift+Right {focus-monitor-right; }
     Mod+Shift+Down { focus-workspace-down; }
     Mod+Shift+Up { focus-workspace-up; }
     Mod+Ctrl+Left  { move-column-left-or-to-monitor-left; }
@@ -183,8 +182,8 @@ binds {
     Mod+Ctrl+Right { move-column-right-or-to-monitor-right; }
     
     // === КЛАВИШИ МЕДИА И ЯРКОСТИ ===
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ +5%"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ -5%"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ +2.5%"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "pactl set-sink-volume @DEFAULT_SINK@ -2.5%"; }
     XF86AudioMute allow-when-locked=true { spawn-sh "pactl set-sink-mute @DEFAULT_SINK@ toggle"; }
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+5%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "5%-"; }
@@ -235,6 +234,11 @@ window-rule {
 
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+    match app-id="gamecenter.exe" title="VK Play"
     open-floating true
 }
 
