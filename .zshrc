@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
-export ZSH="/etc/oh-my-zsh/.oh-my-zsh"
+export ZSH="~/.config/oh-my-zsh"
 export ZSH_CUSTOM="$ZSH"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -73,3 +73,11 @@ alias dpruneall='docker system prune -a'    # Жёсткая очистка вс
 alias wgdown="wg-quick down wg0"
 alias wgup="wg-quick up wg0"
 alias ebash="bash"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/strhzy/.lmstudio/bin"
+# End of LM Studio CLI section
+
+
+# NPM global bin (added by Qwen Code installer)
+export PATH="$HOME/.npm-global/bin:$PATH"
