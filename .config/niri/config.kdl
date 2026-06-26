@@ -1,8 +1,15 @@
 // ============================================================================
 // ВЫВОДЫ (MONITORS)
 // ============================================================================
-output "eDP-1" {
+output "HDMI-A-1" {
+    mode "2560x1440@144.002"
+    position x=0 y=0
     scale 1
+}
+
+output "eDP-1" {
+    mode "2560x1600@165"
+    scale 2.0
 }
 
 // ============================================================================
@@ -12,7 +19,7 @@ input {
     keyboard {
         xkb {
             layout "us,ru"
-            options "grp:alt_shift_toggle"
+            options "grp:ctrl_space_toggle"
         }
     }
     touchpad {
@@ -248,9 +255,17 @@ debug {
   honor-xdg-activation-with-invalid-serial
 }
 
+// Set the regular wallpaper on the backdrop.
 layer-rule {
   match namespace="^noctalia-overview*"
   place-within-backdrop true
+}
+
+// Optionally, disable the workspace shadows in the overview.
+overview {
+  workspace-shadow {
+    off
+  }
 }
 
 include "./noctalia.kdl"
